@@ -1,63 +1,59 @@
 pragma solidity ^0.4.0;
- contract erc20
-{
-     function totalSupply() public  returns (uint256);
-     function balanceOf(address tokenOwner) public constant returns (uint256 );
-     function transfer(address from,address to, uint tokens) public returns (bool success);
-     function allowance(address tokenOwner, address spender) public  view returns (uint256 remaining);
-     function approve(address spender, uint tokens) public returns (bool success);
-     function transferfrom(address from,address to,uint256 tokens)public;
-     event Transfer(address from,address to,uint tokens);
-     event Approve(address from,address to,uint tokens);
+import "./safemath.sol";
+contract Token {
+    
+     function totalSupply(uint256 depo)returns(uint);
+     function balanceOf(address _owner)public constant returns (uint256 balance); 
+     function transfer(address reciver,uint256 transferamt) public returns (bool success); 
+     function transferFrom(address _from, address _to, uint256 _value)  returns (bool success); 
+     function approve(address _spender, uint256 _value) returns (bool success); 
+     function allowance(address _owner, address _spender) constant returns (uint256 remaining);
+     event Transfer(address indexed _from, address indexed _to, uint256 _value);
+     event Approval(address indexed _owner, address indexed _spender, uint256 _value);
+    
 }
-contract bankWallot is erc20
+contract bank is Token
 {
-uint256 public constant totalsupply=1000;
-mapping(address=>uint256) balance;
-mapping(address=>mapping(address=>uint256))allowed;
-
- function totalSupply() public  returns (uint256)
+    using safemath for uint256;
+    struct bk
     {
-    
-       
-       return balance[msg.sender]=totalsupply;
-       
-    }
-      function balanceOf(address tokenOwner) public constant returns (uint256 )
+     uint256 balance;
+     }
+    mapping(address => bk)bk1;
+    mapping(address=>mapping(address => uint256))bk2;
+    function totalSupply(uint256 depo)returns(uint)
     {
-      return  balance[tokenOwner];
-    
+        bk1[msg.sender].balance=depo;
+        return bk1[msg.sender].balance;
     }
-     function transfer(address from,address to, uint tokens) public returns (bool success)
-      {
-          require(tokens<totalsupply);   
-          balance[from]-=tokens;
-          balance[to]+=tokens;
-          Transfer(from,to,tokens);
-          return true;
-          
-          
-      }
-      function allowance(address tokenOwner, address spender) public view returns (uint256 remaining)
-      {
-        return allowed[tokenOwner][spender];
+    function transfer(address reciver,uint256 transferamt) public returns (bool success)
+    {
+        require(bk1[msg.sender].balance>=transferamt && transferamt > 0);
+         bk1[reciver].balance=bk1[reciver].balance.add(transferamt);
+       bk1[msg.sender].balance=bk1[msg.sender].balance.sub(transferamt);
+        Transfer(msg.sender, reciver, transferamt);
+        return true;
+    }
+     function approve(address _spender, uint256 _value) returns (bool success) {
         
-      }
-     
-      function approve(address spender, uint tokens) public returns (bool success)
-      {
-         require(tokens<totalsupply);
-         allowed[msg.sender][spender]=tokens;
-         Approve(msg.sender,spender,tokens);
-         return true;
-          
-      }
-      function transferfrom(address from,address to,uint256 tokens) public
-      {
-          require(tokens<totalsupply);
-          balance[msg.sender]-=tokens;
-          allowed[msg.sender][from]-=tokens;
-          balance[to]+=tokens;
-         
-      }
+        bk2[msg.sender][_spender] = _value;
+         Approval(msg.sender, _spender, _value);
+        return true;
+    }
+    function allowance(address _owner,address _spender) constant returns (uint256 remaining) 
+   {
+      return bk2[_owner][_spender];
+   }
+    function transferFrom(address _from, address _to, uint256 _value) returns (bool success) 
+    {
+       require(bk2[msg.sender][_from] >= _value && _value > 0); 
+             bk1[_to].balance=bk1[_to].balance.add(_value);
+            bk1[msg.sender].balance=bk1[msg.sender].balance.sub(_value);
+             bk2[msg.sender][_from]=bk2[msg.sender][_from].sub(_value);
+            return true;
+    } 
+    function balanceOf(address _owner) constant returns (uint256 balance)
+    {
+        return bk1[_owner].balance;
+    }
 }
