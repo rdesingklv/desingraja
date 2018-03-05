@@ -1,119 +1,62 @@
+<!DOCTYPE html>
 <html>
   <head>
-	<title>Bank</title>
-  </head>
-	<body>
-		<legend>Bank Wallot</legend>
-		<marquee>Bank Wallot</marquee>
-		<body bgcolor="green"">
-		<table>
-			<tr>
-				<td>TotalSupply</td>
-
-				<td><input type="Button" value="submit" id="total_supply"/></td>
-
-				<td><pre id="hashresult1"></pre></td>
-			</tr>
-
-			<tr>
-
-				<td>BalanceOf</td>
-
-				<td><input type="text" id="owner_address" name="owner_acc"/></td> 
-
-				<td><input type="Button" value="submit" id="balance_bt"/></td>
-
-				<td><pre id="hashresult2"></pre></td>
-
-			</tr>
-
-			<tr>
-				<td>Transfer</td>
-
-				<td><input type="text" id="owner_address" name="owner_acc"/></td>
-
-				<td><input type="text" id="spender_address" name="spender_acc"/></td>
-				
-				<td><input type="text" id="tokens" name="tokens_amnt"/></td>
-
-				<td><input type="button" value="submit" id="transfer_amnt"/></td>	
-
-				<td><pre id="hashresult3"></pre></td>
-			</tr>
-
-			<tr>
-				<td>Allowance</td>
-
-				<td><input type="text" id="owner_address" name="owner_acc"/></td>
-
-				<td><input type="text" id="spender_address" name="spender_acc"/></td>
-					
-				<td><input type="button" value="submit" id="allowance_amnt"/></td>
-
-				<td><pre id="hashresult4"> </pre></td>
-					
-				</tr>
-			
-			<tr>
-				<td>Approve</td>
-
-				<td><input type="text" id="spender_address" name="spender_acc"/></td>
-
-				<td><input type="text" id="tokens" name="tokens_value"/></td>
-					
-				<td><input type="button" value="submit" id="approve_amnt"/></td>
-
-				<td><pre id="hashresult5"> </pre></td>
-			</tr>
-			
-			
-			<tr>
-				<td>Transferfrom</td>
-
-				<td><input type="text" id="spender_address" name="spender_acc"/></td>
-
-				<td><input type="text" id="sender_address" name="sender_acc"/></td>
-				
-				<td><input type="text" id="tokens" name="tokens_amnt"/></td>
-
-				<td><input type="button" value="submit" id="transferfrom_amnt"/></td>	
-
-				<td><pre id="hashresult6"></pre><td>
-			</tr>
-
-		
-			</table>
-				
-	<script>
+    <meta charset="utf-8">
+    <title>Test</title>
+    <script src="web3.min.js"></script>
+   </head>
+  <body>
+  <form style="background-color:white">
    
+   <style>
+   p {
+    font-family: black;
+    font-size: 20px;
+    color:black;
+     }
+   </style>
+   <h1>Bank Wallet</h1>
+   <p>Deposit Amount</p>
+<input id="amount" type="text" placeholder="deposit"/>
+      <input type="button" onclick="dp()" value="Deposit"><h1 id="b2"></h1><br>
+   <p>Amount Transaction</p>
+   <input id="receiver" type="text" placeholder="receiver"/>
+   <input id="transferamt" type="text" placeholder="transferamt"/>
+   <input type="button" onclick="tr()" value="Transaction"><h1 id="b5"></h1><br>
+   <p>Approval</p>
+   <input id="spender" type="text" placeholder="spender"/>
+   <input id="value" type="text" placeholder="value"/>
+   <input type="button" onclick="ap()" value="Approve"><h1 id="b8"></h1><br>
+   <p>Allowance</p>
+   <input id="owner" type="text" placeholder="owner"/>
+   <input id="spenderadd" type="text" placeholder="spender"/>
+   <input type="button" onclick="allo()" value="Allowance"><h1 id="b11"></h1><br>
+   <p>Transferfrom Approved User</p>
+   <input id="from" type="text" placeholder="from"/>
+   <input id="to" type="text" placeholder="to"/>
+   <input id="price" type="text" placeholder="amount"/>
+   <input type="button" onclick="trans()" value="Transferfrom"><h1 id="b15"></h1><br>
+   <p>Check Balance</p>
+   <input id="balcheck" type="text" placeholder="balcheck"/>
+   <input type="button" onclick="bal()" value="Balance"><h1 id="b17"></h1><br>
+   
+   </form>
+   </body>
+   <script>
         web3.eth.defaultAccount = web3.eth.accounts[0];
-        var cont = web3.eth.contract([
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "totalsupply",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
+        var bank= web3.eth.contract([
 	{
 		"constant": true,
 		"inputs": [
 			{
-				"name": "tokenOwner",
+				"name": "_owner",
 				"type": "address"
 			}
 		],
 		"name": "balanceOf",
 		"outputs": [
 			{
-				"name": "",
+				"name": "balance",
 				"type": "uint256"
 			}
 		],
@@ -125,11 +68,11 @@
 		"constant": true,
 		"inputs": [
 			{
-				"name": "tokenOwner",
+				"name": "_owner",
 				"type": "address"
 			},
 			{
-				"name": "spender",
+				"name": "_spender",
 				"type": "address"
 			}
 		],
@@ -148,40 +91,40 @@
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": false,
-				"name": "from",
+				"indexed": true,
+				"name": "_owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "_spender",
 				"type": "address"
 			},
 			{
 				"indexed": false,
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "tokens",
+				"name": "_value",
 				"type": "uint256"
 			}
 		],
-		"name": "Approve",
+		"name": "Approval",
 		"type": "event"
 	},
 	{
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": false,
-				"name": "from",
+				"indexed": true,
+				"name": "_from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "_to",
 				"type": "address"
 			},
 			{
 				"indexed": false,
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "tokens",
+				"name": "_value",
 				"type": "uint256"
 			}
 		],
@@ -192,11 +135,11 @@
 		"constant": false,
 		"inputs": [
 			{
-				"name": "spender",
+				"name": "_spender",
 				"type": "address"
 			},
 			{
-				"name": "tokens",
+				"name": "_value",
 				"type": "uint256"
 			}
 		],
@@ -213,7 +156,12 @@
 	},
 	{
 		"constant": false,
-		"inputs": [],
+		"inputs": [
+			{
+				"name": "depo",
+				"type": "uint256"
+			}
+		],
 		"name": "totalSupply",
 		"outputs": [
 			{
@@ -229,15 +177,11 @@
 		"constant": false,
 		"inputs": [
 			{
-				"name": "from",
+				"name": "reciver",
 				"type": "address"
 			},
 			{
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"name": "tokens",
+				"name": "transferamt",
 				"type": "uint256"
 			}
 		],
@@ -256,62 +200,40 @@
 		"constant": false,
 		"inputs": [
 			{
-				"name": "from",
+				"name": "_from",
 				"type": "address"
 			},
 			{
-				"name": "to",
+				"name": "_to",
 				"type": "address"
 			},
 			{
-				"name": "tokens",
+				"name": "_value",
 				"type": "uint256"
 			}
 		],
-		"name": "transferfrom",
-		"outputs": [],
+		"name": "transferFrom",
+		"outputs": [
+			{
+				"name": "success",
+				"type": "bool"
+			}
+		],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]);
-        var con_add = cont.at('0x661059d33510c1d4af9a0e05f1532dc9fdaadb43'); 
-	var totalsupply_btn= document.getElementById('total_supply');
-     	
-	var balance_btn=document.getElementById('balance_bt');
-	var owner_acc= document.getElementById('owner_address');
+     var sybex = bank.at('0x56e29ec837433764329a2d58a7012384f69809de');
      
-	
-	var transfer_btn=document.getElementById('transfer_amnt');	
-	var owner_acc = document.getElementById('owner_address');
-	var spender_acc = document.getElementById('spender_address');
-	var tokens_amnt = document.getElementById('tokens');
-	
-	var allowance_btn=document.getElementById('allowance_amnt');	
-	var owner_acc = document.getElementById('owner_address');
-	var spender_acc= document.getElementById('spender_address');
-	var approve_btn=document.getElementById('approve_amnt');
-	var spender_acc= document.getElementById('spender-address');
-	var tokens_value= document.getElementById('tokens');
-	var transferfrom_btn=document.getElementById('transferfrom_amnt');	
-	var spender_acc = document.getElementById('spender_address');
-	var sender_acc = document.getElementById('sender_address');
-	var tokens_amnt = document.getElementById('tokens');
-	var output1 = document.getElementById('hashresult1');
-	var output2 = document.getElementById('hashresult2');
-	var output3 = document.getElementById('hashresult3');
-	var output4 = document.getElementById('hashresult4');
-	var output5 = document.getElementById('hashresult5');
-	var output5 = document.getElementById('hashresult6');
-     	
-    	 if(!web3.isConnected()) {
+     if(!web3.isConnected()) {
   
-    	    console.log("Ok");
+        console.log("Ok");
         
-    	  } else {
-    	    console.log("no");
-   	   }
-   	   web3.version.getNetwork((err, netId) => {
+      } else {
+        console.log("no");
+      }
+      web3.version.getNetwork((err, netId) => {
             switch (netId) {
               case "1":
                 console.log('This is mainnet')
@@ -332,80 +254,78 @@
                 console.log('This is an unknown network.')
             }
         })
-	totalsupply_btn.addEventListener('click',function(){
-          return con_add.totalSupply(function (error,result){
-            if (!error) {
-              output2.innerHTML = result;
-              console.log(result);
-                             
-            } else {
-              output2.innerHTML = "Error";
-              console.error(error);
+        function dp()
+       {
+        var a=document.getElementById("amount").value;
+        sybex.totalSupply(a,function(error,result){
+                if (!error) {
+                    alert(result);
+                }
+                else{
+                  console.error(error);
+                }
+              });
+	alert("done!...");
             }
-        });
-      });
- 	balance_btn.addEventListener('click',function(){
-          return con_add.balanceOf(owner_acc.value, function (error,result){
-            if (!error) {
-              output3.innerHTML = result;
-              console.log(result);
-                             
-            } else {
-             output3.innerHTML = "Error";
-              console.error(error);
+	function tr(){
+        var b=document.getElementById("receiver").value;
+	var c=document.getElementById("transferamt").value;
+        sybex.transfer(b,c,function(error,result){
+                if (!error) {
+                    alert(result);
+                }
+                else{
+                  console.error(error);
+                }
+              });
             }
-        });
-      });
-	transfer_btn.addEventListener('click',function(){
-	return con_add.transfer(owner_acc.value,spender_acc.value,tokens_amnt.value,function (error,result) {
-		if (!error) {
-		  output4.innerHTML = result;
-		  console.log(result);
-		}
-		else {
-		output4.innerHTML = "Error";
-		  console.error(error);
-	}
-      });
-      });
-	 allowance_btn.addEventListener('click',function(){
-          return con_add.allowance(owner_acc.value,spender_acc.value,function(error,result){
-            if (!error) {
-              output4.innerHTML = result;
-              console.log(result);
-                             
-            } else {
-              output4.innerHTML = "Error";
-              console.error(error);
+	function ap(){
+        var d=document.getElementById("spender").value;
+	var e=document.getElementById("value").value;
+        sybex.approve(d,e,function(error,result){
+                if (!error) {
+                    alert(result);
+                }
+                else{
+                  console.error(error);
+                }
+              });
             }
-        });
-      });
-	approve_btn.addEventListener('click',function(){
-          return con_add.approve(spender_acc.value,tokens_value.value,function(error,result){
-            if (!error) {
-              output5.innerHTML = result;
-              console.log(result);
-                             
-            } else {
-              output5.innerHTML = "Error";
-              console.error(error);
+	function allo(){
+        var f=document.getElementById("owner").value;
+	var g=document.getElementById("spenderadd").value;
+        sybex.allowance(f,g,function(error,result){
+                if (!error) {
+                    alert(result);
+                }
+                else{
+                  console.error(error);
+                }
+              });
             }
-        });
-      });
-	transferfrom_btn.addEventListener('click',function(){
-          return con_add.transferfrom(spender_acc.value,sender_acc.value,tokens_amnt.value,function(error,result){
-            if (!error) {
-              output5.innerHTML = result;
-              console.log(result);
-                             
-            } else {
-              output5.innerHTML = "Error";
-              console.error(error);
+	function trans(){
+        var h=document.getElementById("from").value;
+	var i=document.getElementById("to").value;
+	var j=document.getElementById("price").value;
+        sybex.transferfrom(h,i,j,function(error,result){
+                if (!error) {
+                    alert(result);
+                }
+                else{
+                  console.error(error);
+                }
+              });
             }
-        });
-      });
-				
-			</script>
-			</body>
-			
-			</html>
+	function bal(){
+        var k=document.getElementById("balcheck").value;
+	sybex.balanceOf(k,function(error,result){
+                if (!error) {
+                    alert(result);
+                }
+                else{
+                  console.error(error);
+                }
+              });
+            }
+</script>
+</html>
