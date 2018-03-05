@@ -1,0 +1,411 @@
+<html>
+  <head>
+	<title>Bank</title>
+  </head>
+	<body>
+		<legend>Bank Wallot</legend>
+		<marquee>Bank Wallot</marquee>
+		<body bgcolor="green"">
+		<table>
+			<tr>
+				<td>TotalSupply</td>
+
+				<td><input type="Button" value="submit" id="total_supply"/></td>
+
+				<td><pre id="hashresult1"></pre></td>
+			</tr>
+
+			<tr>
+
+				<td>BalanceOf</td>
+
+				<td><input type="text" id="owner_address" name="owner_acc"/></td> 
+
+				<td><input type="Button" value="submit" id="balance_bt"/></td>
+
+				<td><pre id="hashresult2"></pre></td>
+
+			</tr>
+
+			<tr>
+				<td>Transfer</td>
+
+				<td><input type="text" id="owner_address" name="owner_acc"/></td>
+
+				<td><input type="text" id="spender_address" name="spender_acc"/></td>
+				
+				<td><input type="text" id="tokens" name="tokens_amnt"/></td>
+
+				<td><input type="button" value="submit" id="transfer_amnt"/></td>	
+
+				<td><pre id="hashresult3"></pre></td>
+			</tr>
+
+			<tr>
+				<td>Allowance</td>
+
+				<td><input type="text" id="owner_address" name="owner_acc"/></td>
+
+				<td><input type="text" id="spender_address" name="spender_acc"/></td>
+					
+				<td><input type="button" value="submit" id="allowance_amnt"/></td>
+
+				<td><pre id="hashresult4"> </pre></td>
+					
+				</tr>
+			
+			<tr>
+				<td>Approve</td>
+
+				<td><input type="text" id="spender_address" name="spender_acc"/></td>
+
+				<td><input type="text" id="tokens" name="tokens_value"/></td>
+					
+				<td><input type="button" value="submit" id="approve_amnt"/></td>
+
+				<td><pre id="hashresult5"> </pre></td>
+			</tr>
+			
+			
+			<tr>
+				<td>Transferfrom</td>
+
+				<td><input type="text" id="spender_address" name="spender_acc"/></td>
+
+				<td><input type="text" id="sender_address" name="sender_acc"/></td>
+				
+				<td><input type="text" id="tokens" name="tokens_amnt"/></td>
+
+				<td><input type="button" value="submit" id="transferfrom_amnt"/></td>	
+
+				<td><pre id="hashresult6"></pre><td>
+			</tr>
+
+		
+			</table>
+				
+	<script>
+   
+        web3.eth.defaultAccount = web3.eth.accounts[0];
+        var cont = web3.eth.contract([
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "totalsupply",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "tokenOwner",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "tokenOwner",
+				"type": "address"
+			},
+			{
+				"name": "spender",
+				"type": "address"
+			}
+		],
+		"name": "allowance",
+		"outputs": [
+			{
+				"name": "remaining",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "tokens",
+				"type": "uint256"
+			}
+		],
+		"name": "Approve",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "tokens",
+				"type": "uint256"
+			}
+		],
+		"name": "Transfer",
+		"type": "event"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"name": "tokens",
+				"type": "uint256"
+			}
+		],
+		"name": "approve",
+		"outputs": [
+			{
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "totalSupply",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"name": "tokens",
+				"type": "uint256"
+			}
+		],
+		"name": "transfer",
+		"outputs": [
+			{
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"name": "tokens",
+				"type": "uint256"
+			}
+		],
+		"name": "transferfrom",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]);
+        var con_add = cont.at('0x661059d33510c1d4af9a0e05f1532dc9fdaadb43'); 
+	var totalsupply_btn= document.getElementById('total_supply');
+     	
+	var balance_btn=document.getElementById('balance_bt');
+	var owner_acc= document.getElementById('owner_address');
+     
+	
+	var transfer_btn=document.getElementById('transfer_amnt');	
+	var owner_acc = document.getElementById('owner_address');
+	var spender_acc = document.getElementById('spender_address');
+	var tokens_amnt = document.getElementById('tokens');
+	
+	var allowance_btn=document.getElementById('allowance_amnt');	
+	var owner_acc = document.getElementById('owner_address');
+	var spender_acc= document.getElementById('spender_address');
+	var approve_btn=document.getElementById('approve_amnt');
+	var spender_acc= document.getElementById('spender-address');
+	var tokens_value= document.getElementById('tokens');
+	var transferfrom_btn=document.getElementById('transferfrom_amnt');	
+	var spender_acc = document.getElementById('spender_address');
+	var sender_acc = document.getElementById('sender_address');
+	var tokens_amnt = document.getElementById('tokens');
+	var output1 = document.getElementById('hashresult1');
+	var output2 = document.getElementById('hashresult2');
+	var output3 = document.getElementById('hashresult3');
+	var output4 = document.getElementById('hashresult4');
+	var output5 = document.getElementById('hashresult5');
+	var output5 = document.getElementById('hashresult6');
+     	
+    	 if(!web3.isConnected()) {
+  
+    	    console.log("Ok");
+        
+    	  } else {
+    	    console.log("no");
+   	   }
+   	   web3.version.getNetwork((err, netId) => {
+            switch (netId) {
+              case "1":
+                console.log('This is mainnet')
+                break
+              case "2":
+                console.log('This is the deprecated Morden test network.')
+                break
+              case "3":
+                console.log('This is the ropsten test network.')
+                break
+              case "4":
+                console.log('This is the Rinkeby test network.')
+                break
+              case "42":
+                console.log('This is the Kovan test network.')
+                break
+              default:
+                console.log('This is an unknown network.')
+            }
+        })
+	totalsupply_btn.addEventListener('click',function(){
+          return con_add.totalSupply(function (error,result){
+            if (!error) {
+              output2.innerHTML = result;
+              console.log(result);
+                             
+            } else {
+              output2.innerHTML = "Error";
+              console.error(error);
+            }
+        });
+      });
+ 	balance_btn.addEventListener('click',function(){
+          return con_add.balanceOf(owner_acc.value, function (error,result){
+            if (!error) {
+              output3.innerHTML = result;
+              console.log(result);
+                             
+            } else {
+             output3.innerHTML = "Error";
+              console.error(error);
+            }
+        });
+      });
+	transfer_btn.addEventListener('click',function(){
+	return con_add.transfer(owner_acc.value,spender_acc.value,tokens_amnt.value,function (error,result) {
+		if (!error) {
+		  output4.innerHTML = result;
+		  console.log(result);
+		}
+		else {
+		output4.innerHTML = "Error";
+		  console.error(error);
+	}
+      });
+      });
+	 allowance_btn.addEventListener('click',function(){
+          return con_add.allowance(owner_acc.value,spender_acc.value,function(error,result){
+            if (!error) {
+              output4.innerHTML = result;
+              console.log(result);
+                             
+            } else {
+              output4.innerHTML = "Error";
+              console.error(error);
+            }
+        });
+      });
+	approve_btn.addEventListener('click',function(){
+          return con_add.approve(spender_acc.value,tokens_value.value,function(error,result){
+            if (!error) {
+              output5.innerHTML = result;
+              console.log(result);
+                             
+            } else {
+              output5.innerHTML = "Error";
+              console.error(error);
+            }
+        });
+      });
+	transferfrom_btn.addEventListener('click',function(){
+          return con_add.transferfrom(spender_acc.value,sender_acc.value,tokens_amnt.value,function(error,result){
+            if (!error) {
+              output5.innerHTML = result;
+              console.log(result);
+                             
+            } else {
+              output5.innerHTML = "Error";
+              console.error(error);
+            }
+        });
+      });
+				
+			</script>
+			</body>
+			
+			</html>
